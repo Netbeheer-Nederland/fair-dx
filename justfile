@@ -41,18 +41,23 @@ _generate-schemas:
     echo "Generating SHACL (JSON-LD)…"
     mkdir -p output/model/
     cat src/model/dataset.metadata.shacl.ymld | yq -o json > output/model/dataset.metadata.shacl.jsonld
+    cp output/model/dataset.metadata.shacl.jsonld output/docs/adoc/modules/ROOT/attachments/
     echo "… OK."
     echo "Generated SHACL schema files at: output/schemas/shacl/"
     echo
 
 # Build processing logic called by Antora Collector.
 [group("development")]
-_build: _clean _generate-schemas
+_build: _clean && _generate-schemas
     mkdir -p output/docs/adoc
     cp -r src/docs/* output/docs/adoc
     yq -i 'del(.version)' output/docs/adoc/antora.yml
 
 _assemble:
+    for version in output/docs/html/*; do \
+        if [[ ! -d $version ]] || [[ $version == output/docs/html/_ ]] then continue; fi; \
+        cp $version/_attachments/dataset.metadata.shacl.jsonld $version/; \
+    done
     touch output/docs/html/.nojekyll
 
 # Build website

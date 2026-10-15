@@ -1,3 +1,4 @@
 name: ROOT
 title: NBNL Dataset
-nav: []
+nav:
+  - modules/ROOT/nav.adoc

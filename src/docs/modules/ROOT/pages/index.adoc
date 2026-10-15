@@ -1,3 +1,12 @@
 = NBNL Dataset
 
 Test voor deze versie.
+
+SHACL:: http://localhost:8000/1.0/dataset.metadata.shacl.jsonld[SHACL shapes graph]
+
+== SHACL
+
+[source,json]
+....
+include::attachment$dataset.metadata.shacl.jsonld[]
+....
