@@ -1,0 +1,31 @@
+site:
+  url: http://localhost:8000
+  start_page: ROOT::index.adoc
+content:
+  sources:
+    - url: ''
+      start_path: src/docs
+asciidoc:
+  attributes:
+    page-pagination: ''
+    experimental: ''
+    kroki-fetch-diagram: false  # Whether rendering is done server-sided so the images are served statically.
+    kroki-default-format: svg@
+    kroki-server-url: http://fruit.ritger.nl:9000
+  extensions:
+    - asciidoctor-kroki
+output:
+  clean: true
+  dir: output/docs/html
+urls:
+  latest_version_segment: ''
+ui:
+  bundle:
+    url: https://github.com/Netbeheer-Nederland/antora-ui-nbnl/releases/download/1.2/ui-bundle.zip
+  default_layout: default
+antora:
+  extensions:
+    - require: 'scripts/antora/add-collector-config.js'
+    - require: '@antora/collector-extension'
+    - require: 'scripts/antora/version-postprocessor.js'
+    - require: '@antora/lunr-extension'
