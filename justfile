@@ -4,8 +4,7 @@ name := "nbnl-dataset"
 fname := replace(name, "-", "_")
 title := "NBNL Dataset"
 site_title := title
-# ref_name := env("REF_NAME", shell("git rev-parse --abbrev-ref HEAD")) 
-ref_name := "main"
+ref_name := env("REF_NAME", shell("git rev-parse --abbrev-ref HEAD")) 
 version := if ref_name == "main" { "upcoming" } else { replace(ref_name, "/", "-") }  # draft/ -> draft-
 base_iri := "https://modellen.netbeheernederland.nl"
 schema_id := base_iri + "/" + name + "/" + version
@@ -51,6 +50,7 @@ _generate-schemas:
 _build: _clean _generate-schemas
     mkdir -p output/docs/adoc
     cp -r src/docs/* output/docs/adoc
+    yq -i 'del(.version)' output/docs/adoc/antora.yml
 
 _assemble:
     touch output/docs/html/.nojekyll
