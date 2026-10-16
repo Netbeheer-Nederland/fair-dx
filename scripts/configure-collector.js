@@ -7,12 +7,13 @@ module.exports.register = function () {
         let collector = [
 	  {
             run: {
-              command: "scripts/generate-shacl.sh",
+              command: "scripts/ymld-to-jsonld.js",
               dir: process.env.PWD
             },
             scan: {
               clean: true,
-              dir: "built"
+              dir: "built",
+              into: "modules/ROOT/attachments"
             }
 	  }
         ]
