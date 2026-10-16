@@ -1,0 +1,7 @@
+- run:
+    command: scripts/ymld-to-jsonld.js
+    dir: process.env.PWD
+  scan:
+    clean: true
+    dir: built
+    into: modules/ROOT/attachments

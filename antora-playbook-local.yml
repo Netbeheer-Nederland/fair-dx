@@ -1,3 +1,5 @@
+site:
+  url: http://localhost:8000/waardelijsten
 content:
   sources:
     - url: ''

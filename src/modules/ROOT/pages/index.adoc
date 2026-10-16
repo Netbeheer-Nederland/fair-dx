@@ -1,7 +1,8 @@
 = NBNL Dataset
 
 Version:: {page-component-display-version}
-Artifacts:: {site-url}/dataset.metadata.shacl.jsonld[SHACL shapes graph]
+Artifacts:: xref:attachment$dataset.metadata.shacl.jsonld
+// Artifacts:: {site-url}/dataset.metadata.shacl.jsonld[SHACL shapes graph]
 
 == Conformance
 The key words _MUST_, _MUST NOT_, _REQUIRED_, _SHALL_, _SHALL NOT_, _SHOULD_, _SHOULD NOT_, _RECOMMENDED_,  _MAY_, and _OPTIONAL_ in this document are to be interpreted as described in <<RFC2119>>.
