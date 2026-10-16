@@ -24,7 +24,7 @@ output:
 ui:
   bundle:
     url: https://github.com/Netbeheer-Nederland/antora-ui-nbnl/releases/download/1.2/ui-bundle.zip
-  default_layout: default
+  default_layout: single-page
 antora:
   extensions:
     - require: 'scripts/antora/add-collector-config.js'

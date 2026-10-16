@@ -54,10 +54,15 @@ _build: _clean && _generate-schemas
     yq -i 'del(.version)' output/docs/adoc/antora.yml
 
 _assemble:
-    for version in output/docs/html/*; do \
-        if [[ ! -d $version ]] || [[ $version == output/docs/html/_ ]] then continue; fi; \
-        cp $version/_attachments/dataset.metadata.shacl.jsonld $version/; \
-    done
+    #!/bin/bash
+    if [[ $CI == "true" ]]; then \
+        for version in output/docs/html/*; do \
+            if [[ ! -d $version ]] || [[ $version == output/docs/html/_ ]] then continue; fi; \
+            cp $version/_attachments/dataset.metadata.shacl.jsonld $version/; \
+        done; \
+    else \
+        cp output/docs/html/_attachments/dataset.metadata.shacl.jsonld output/docs/html/; \
+    fi
     touch output/docs/html/.nojekyll
 
 # Build website

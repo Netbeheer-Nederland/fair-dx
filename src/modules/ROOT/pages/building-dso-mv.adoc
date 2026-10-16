@@ -1,0 +1,316 @@
+= Building the Data Sets
+
+The Equipment data product defines how devices and equipment in a power network
+are modelled, i.e. the connectivity of the grid (node/breaker). This document
+explains the structure of the datasets and how instances interact across
+datasets.
+
+CAUTION: Generate your own mRIDs using _UUID4_
+
+All JSON-LD examples below are just that; do **not** reuse mRIDs unless
+retrieved from the
+https://modellen.netbeheernederland.nl/object-register[NBNL Object Register].
+
+== Overview
+
+Each _System Operator_ provides a dataset containing the connectivity for a
+specific part of the electrical grid (HV, MV and LV). The High Voltage (HV)
+dataset defines exchange points between TSO and DSOs. This dataset is also
+referred to as the _boundary dataset_.
+
+A singular dataset (with the exception of the boundary dataset) does not
+validate against the provided SHACL on its own; both boundary dataset and
+system operator specific dataset must be validated together.
+
+== Metadata
+
+Each dataset requires metadata to keep track of issuer, issuance date, schema
+and dependencies.
+
+.Example metadata in JSON-LD
+[source,json]
+----
+"@id": "urn:uuid:2d3088c1-2b9a-4cbc-84fa-c0670e0e8ecc", <1>
+"dcterms:issued": {
+  "@value": "2025-12-05T12:34:567Z", <2>
+  "@type": "xsd:date"
+},
+"dcterms:publisher": {
+  "@id": "urn:uuid:4f74c8e2-adb5-4815-9607-eb00fb6a0d55",
+  "dcterms:title": "Liander" <3>
+},
+"dcterms:conformsTo": [
+  {
+    "@id": "https://modellen.netbeheernederland.nl/nbnl-equipment/1.0" <4>
+  }
+],
+"dcterms:references": [
+  {
+    "@id": "urn:uuid:4562ba86-b5e0-470b-8e36-dae55428d77f" <5>
+  }
+]
+----
+
+The following information is required:
+
+1. unique identifier for this dataset. Use a generated UUID;
+2. issuance data, start of the validity period for this dataset;
+3. publisher of the dataset. Use the mRID/name from the _NBNL Object Register_;
+4. schema to validate the dataset against. Verify usage of the correct version;
+5. any datasets this dataset is dependant on. For any non-boundary datasets,
+this is the _@id_ of the boundary dataset referred to.
+
+=== Automatic validation
+
+Dataset metadata can be validated automatically using the
+xref::attachment$dataset.metadata.shacl.jsonld[Dataset Metadata SHACL].
+
+Make sure you target the default graph of the JSON-LD dataset which is where
+the metadata lives or you will get false positive results.
+
+[%collapsible]
+.Example: Validating dataset metadata using PySHACL
+====
+
+Let's use the xref::attachment$dataset.metadata.shacl.jsonld[Dataset Metadata SHACL] to validate the [https://modellen.netbeheernederland.nl/nbnl-equipment/3.0/schema/_attachments/examples/jsonld/mv.example.jsonld[NBNL Equipment Profile 3.0 MV Example Dataset].
+
+[source,python]
+....
+from rdflib import Dataset, Graph
+from pyshacl import validate
+
+dataset = Dataset()
+dataset.parse("https://modellen.netbeheernederland.nl/nbnl-equipment/3.0/schema/_attachments/examples/jsonld/mv.example.jsonld", format="json-ld")
+
+shapes_graph = Graph()
+shapes_graph.parse("https://modellen.netbeheernederland.nl/modelling-guidelines/_attachments/dataset.metadata.shacl.jsonld", format="json-ld")
+
+conforms, results_graph, results_text = validate(dataset.default_graph,
+                                                 shacl_graph=shapes_graph)
+....
+====
+
+.For modellers
+[CAUTION]
+Modellers might be tempted to import the _Dataset Metadata SHACL_ in the SHACL
+data model their building. This will not work though, because data and its
+metadata live in different graphs.
+
+== TSO High Voltage (Boundary) Dataset
+
+Each dataset is dependant on the _Object Register_ for the top level instances,
+such as cim:GeographicalRegion and cim:SubGeographicalRegion (_License Area_):
+
+[source,json]
+----
+"dcterms:references": [
+  {
+    "@id": "urn:uuid:5bdf9a6d-ef38-4c4d-a6ee-42a9accdec64" <1>
+  }
+]
+----
+
+1. Include a refence to the JSON-LD provided by the Object Register
+
+WARNING: Consumers of the dataset need to include the Object Register JSON-LD
+in orden for the dataset to validate
+
+The License Area is a container for all cim:Substation-s in the dataset. Use
+the mRID for the License Area from the Object Register, do not add the
+cim:SubGeographicalRegion itself to the dataset:
+
+[source,json]
+----
+{
+  "@id": "urn:uuid:755de658-5567-4b65-85bd-f6d3cf41d992",
+  "@type": "cim:Substation",
+  "cim:Substation.Region": {
+    "@id": "urn:uuid:2128cb2f-9425-4cf7-9462-9fd59e06542d"
+  },
+  "cim:IdentifiedObject.mRID": "755de658-5567-4b65-85bd-f6d3cf41d992",
+  "cim:IdentifiedObject.name": "Station Arnhem 150"
+}
+----
+
+NOTE: Refer to other instances through their @id
+
+A cim:Substation is a _HS/MS-onderstation_, which acts as a container
+for cim:VoltageLevel-s and the eu:BoundaryPoint-s.
+
+=== Voltage Level
+
+[source,json]
+----
+{
+  "@id": "urn:uuid:69e74dbd-b68a-4e2b-8cf7-da98891de6a1",
+  "@type": "cim:VoltageLevel",
+  "cim:VoltageLevel.BaseVoltage": {
+    "@id": "urn:uuid:a22b6bf3-33ab-4f82-89c5-0d427625f2da" <1>
+  },
+  "cim:VoltageLevel.Substation": {
+    "@id": "urn:uuid:755de658-5567-4b65-85bd-f6d3cf41d992"
+  },
+  "cim:IdentifiedObject.mRID": "69e74dbd-b68a-4e2b-8cf7-da98891de6a1"
+}
+----
+
+NOTE: At the time of writing, transformers, busbars, switches and bays are
+**not** part of the HV dataset
+
+A cim:VoltageLevel has a cim:BaseVoltage (1), specifying the high voltage
+transmission level. cim:BaseVoltage is managed by the _NBNL Object Register_,
+so there is no need to seperately add the cim:BaseVoltage and cim:Voltage
+instance. The cim:VoltageLevel is associated with a cim:Substation. It's
+common practice to add a cim:VoltageLevel for each transformer on the
+transmission side of the cim:Substation.
+
+=== Boundary Point
+
+[source,json]
+----
+{
+  "@id": "urn:uuid:d39090b1-58aa-446b-9551-4c6188aa7d0f",
+  "@type": "eu:BoundaryPoint",
+  "nl:IdentifiedObject.europeanArticleNumberEAN": "8000123456789012",
+  "eu:BoundaryPoint.fromEndIsoCode": "NL",
+  "eu:BoundaryPoint.fromEndNameTso": "TenneT",
+  "eu:BoundaryPoint.toEndIsoCode": "NL",
+  "eu:BoundaryPoint.toEndNameTso": "Liander",
+  "cim:IdentifiedObject.mRID": "d39090b1-58aa-446b-9551-4c6188aa7d0f"
+},
+{
+  "@id": "urn:uuid:f0c14f64-3aa3-44ae-b858-18d6a75dc72a",
+  "@type": "cim:ConnectivityNode", <1>
+  "cim:ConnectivityNode.ConnectivityNodeContainer": {
+    "@id": "urn:uuid:69e74dbd-b68a-4e2b-8cf7-da98891de6a1" <2>
+  },
+  "eu:ConnectivityNode.BoundaryPoint": {
+    "@id": "urn:uuid:d39090b1-58aa-446b-9551-4c6188aa7d0f" <3>
+  },
+  "cim:IdentifiedObject.mRID": "f0c14f64-3aa3-44ae-b858-18d6a75dc72a"
+}
+----
+
+Defining a _Boundary Point_ between TSO/DSO is achieved by adding one or more
+cim:ConnectivityNode-s (1) to a specific cim:VoltageLevel (2) and associating
+the cim:ConnectivityNode to a cim:BoundaryPoint (3).
+
+Repeat all steps above to create instances for all functions in the grid and
+associated where required. For a full example, see
+xref:schema:attachment$examples/jsonld/hv-boundary.example.jsonld[Example
+High Voltage (HV) JSON-LD instance data]. Note that the MV example data
+includes a copy of the boundary dataset for validation purposes. Do **not**
+include the boundary dataset for datasets created by a System Operator.
+
+== DSO Medium Voltage (MV) Dataset
+
+The DSO MV dataset builds on the boundary dataset by adding
+cim:PowerTransformer-s and cim:VoltageLevel-s for each distribution
+transformer. Each _Distribution System Operator_ provides a dataset for its own
+License Area, associated to the boundary dataset.
+
+CAUTION: a DSO dataset does not validate stand-alone against the SHACL, the
+boundary dataset is also required!
+
+=== Substation
+
+Each DSO creates a separate Substation as a container for `Equipment`-s, which
+is contained in the License Area (`SubGeographicalRegion`) for that DSO. The
+relationship between `Substation`-s from both TSO & DSO is established through
+the use of `BoundaryPoint`-s.
+
+[source,json]
+----
+{
+  "@id": "urn:uuid:d256319c-f2d8-4bee-a586-37167d841a78",
+  "@type": "cim:Substation",
+  "cim:Substation.Region": {
+    "@id": "urn:uuid:4f74c8e2-adb5-4815-9607-eb00fb6a0d55"
+  },
+  "cim:IdentifiedObject.mRID": "d256319c-f2d8-4bee-a586-37167d841a78",
+  "cim:IdentifiedObject.name": "Liander MS-ruimte 10"
+},
+----
+
+=== Power Transformer
+
+[source,json]
+----
+{
+  "@id": "urn:uuid:efeba515-547b-4c1a-8cd0-4cbc5f714283",
+  "@type": "cim:PowerTransformer", <1>
+  "cim:Equipment.EquipmentContainer": {
+    "@id": "urn:uuid:d256319c-f2d8-4bee-a586-37167d841a78" <2>
+  },
+  "cim:IdentifiedObject.mRID": "efeba515-547b-4c1a-8cd0-4cbc5f714283"
+},
+----
+
+Add all cim:PowerTransformer-s (1) to the cim:Substation (2) created in the
+previous step.
+
+[source,json]
+----
+{
+  "@id": "urn:uuid:9cc70c8a-f352-4ad5-8743-6295e2800c63",
+  "@type": "cim:Terminal", <2>
+  "cim:Terminal.ConnectivityNode": {
+    "@id": "urn:uuid:f0c14f64-3aa3-44ae-b858-18d6a75dc72a" <3>
+  },
+  "cim:IdentifiedObject.mRID": "9cc70c8a-f352-4ad5-8743-6295e2800c63"
+},
+{
+  "@id": "urn:uuid:3c052f67-8180-44a9-8bb6-f13b75e94f02",
+  "@type": "cim:PowerTransformerEnd", <1>
+  "cim:PowerTransformerEnd.PowerTransformer": {
+    "@id": "urn:uuid:efeba515-547b-4c1a-8cd0-4cbc5f714283"
+  },
+  "cim:TransformerEnd.endNumber": 1,
+  "cim:TransformerEnd.Terminal": {
+    "@id": "urn:uuid:9cc70c8a-f352-4ad5-8743-6295e2800c63"
+  },
+  "cim:IdentifiedObject.mRID": "3c052f67-8180-44a9-8bb6-f13b75e94f02"
+}
+----
+
+For the primary transformer winding, add a cim:PowerTransformerEnd (1) and
+cim:Terminal (2). The cim:PowerTransformerEnd is associated with both a
+cim:Terminal and cim:PowerTransformer. Associate the cim:Terminal from the
+primary cim:PowerTransformerEnd with the cim:ConnectivityNode defining a
+cim:BoundaryPoint (3) from the boundary dataset.
+
+[source,json]
+----
+{
+  "@id": "urn:uuid:4d4b29be-1386-45e1-acc3-b86cfab83c94",
+  "@type": "cim:Terminal",
+  "cim:Terminal.ConnectivityNode": {
+    "@id": "urn:uuid:13232d25-3dd8-46f1-ad21-a77b0458648e"
+  },
+  "cim:IdentifiedObject.mRID": "4d4b29be-1386-45e1-acc3-b86cfab83c94"
+},
+{
+  "@id": "urn:uuid:3a926964-8420-4c57-8a1d-8ac87193b0c6",
+  "@type": "cim:PowerTransformerEnd",
+  "cim:PowerTransformerEnd.PowerTransformer": {
+    "@id": "urn:uuid:efeba515-547b-4c1a-8cd0-4cbc5f714283"
+  },
+  "cim:TransformerEnd.endNumber": 2,
+  "cim:TransformerEnd.Terminal": {
+    "@id": "urn:uuid:4d4b29be-1386-45e1-acc3-b86cfab83c94"
+  },
+  "cim:IdentifiedObject.mRID": "3a926964-8420-4c57-8a1d-8ac87193b0c6"
+}
+----
+
+Create an cim:VoltageLevel instance for each cim:PowerTransformer, following
+the instructions from <<_voltage_level>>. Associate the cim:Terminal for the
+secondary (and up) winding(s) for the cim:PowerTransformerEnd with the
+cim:ConnectivityNode in the create cim:VoltageLevel. This explicitly associates
+a cim:PowerTransformerEnd with a specific cim:VoltageLevel and cim:BaseVoltage.
+
+For a full example, see
+xref:schema:attachment$examples/jsonld/mv.example.jsonld[Example
+Medium Voltage (MV) JSON-LD instance data]. Note that the MV example data
+includes a copy of the boundary dataset for validation purposes. Do **not**
+include the boundary dataset for datasets created by a System Operator.

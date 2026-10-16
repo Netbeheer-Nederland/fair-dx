@@ -1,0 +1,45 @@
+= NBNL Dataset
+
+Version:: {page-component-display-version}
+Artifacts:: {site-url}/dataset.metadata.shacl.jsonld[SHACL shapes graph]
+
+== Conformance
+The key words _MUST_, _MUST NOT_, _REQUIRED_, _SHALL_, _SHALL NOT_, _SHOULD_, _SHOULD NOT_, _RECOMMENDED_,  _MAY_, and _OPTIONAL_ in this document are to be interpreted as described in <<RFC2119>>.
+
+== Definition
+
+Every **dataset** _MUST_ be encoded as an RDF graph which is contained as a named graph in an RDF dataset alongside the default graph in which metadata of the dataset is stored.
+
+RDF datasets _SHOULD_ be serialized as a JSON-LD document.
+
+.Anatomy of JSON-LD document representing the dataset
+[source,json]
+....
+{
+    "@id": <1>
+    <2>,
+    "@graph": [
+        <3>
+    ]
+}
+....
+
+<1> The IRI of the dataset.footnote:[One might have expected this value to identify the RDF dataset, but those do not have identifiers. This IRI identifies the associated graph object under `@graph` which in our case is what we consider the dataset.]
+<2> Metadata about the dataset (default graph).
+<3> The dataset graph object.
+
+== Structure
+
+=== Metadata
+
+==== Validation
+
+[source,json]
+....
+include::attachment$dataset.metadata.shacl.jsonld[]
+....
+
+[bibliography]
+== References
+
+* [[[RFC2119]]] S. Bradner. 1997. https://www.rfc-editor.org/rfc/rfc2119[Key words for use in RFCs to Indicate Requirement Levels].

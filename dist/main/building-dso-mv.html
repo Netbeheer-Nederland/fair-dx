@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Building the Data Sets</title>
+    <meta name="generator" content="Antora 3.2.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <link rel="icon" href="../_/img/favicon.png" type="image/png">
+  </head>
+  <body class="single-page">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://modellen.netbeheernederland.nl">
+        <img id="site-logo" alt="" src="../_/img/logo.svg" />
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="🔍 Search">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://modellen.netbeheernederland.nl/data-products"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="height:1rem; margin-right:0.5em; margin-bottom:0.1rem" width="24" height="24" viewBox="0 0 24 24"><path d="M12.97 2.59a1.5 1.5 0 0 0-1.94 0l-7.5 6.363A1.5 1.5 0 0 0 3 10.097V19.5A1.5 1.5 0 0 0 4.5 21h4.75a.75.75 0 0 0 .75-.75V14h4v6.25c0 .414.336.75.75.75h4.75a1.5 1.5 0 0 0 1.5-1.5v-9.403a1.5 1.5 0 0 0-.53-1.144l-7.5-6.363Z"/></svg>&nbsp;Data Products</a>
+        <a class="navbar-item" href=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="height:1rem; margin-right:0.5em; margin-bottom:0.1rem"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.05-.015-2.07-3.345.72-4.05-1.605-4.05-1.605-.54-1.38-1.335-1.755-1.335-1.755-1.095-.75.09-.735.09-.735 1.215.09 1.845 1.245 1.845 1.245 1.08 1.86 2.835 1.32 3.525 1.005.105-.78.42-1.32.765-1.62-2.67-.3-5.475-1.335-5.475-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405 1.02 0 2.04.135 3 .405 2.28-1.56 3.285-1.245 3.285-1.245.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.285 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"></path></svg>&nbsp;Source Code</a>
+        <a class="navbar-item" href="mailto:teamsemantiek@netbeheernederland.nl"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="height:1rem; margin-right:0.5em; margin-bottom:0.1rem"><path d="M16.067,13.6l7.685,6.587A2.968,2.968,0,0,0,24,19V8.549Z"></path><path d="M12.538,13.473,23.892,6.247A3,3,0,0,0,21,4H3A3,3,0,0,0,.108,6.247l11.355,7.226A1.006,1.006,0,0,0,12.538,13.473Z"></path><path d="M0,8.549V19a2.968,2.968,0,0,0,.248,1.185L7.933,13.6Z"></path><path d="M14.314,14.714l-.7.447a3.016,3.016,0,0,1-3.221,0l-.7-.448c-.015.014-.021.033-.036.046L1.618,21.645A2.953,2.953,0,0,0,3,22H21a2.957,2.957,0,0,0,1.383-.355L14.35,14.759C14.334,14.746,14.328,14.727,14.314,14.714Z"></path></svg>&nbsp;Contact</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="main" style="border-right: unset">
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">NBNL Dataset</a></li>
+    <li><a href="building-dso-mv.html">Building the Data Sets</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Building the Data Sets</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Equipment data product defines how devices and equipment in a power network
+are modelled, i.e. the connectivity of the grid (node/breaker). This document
+explains the structure of the datasets and how instances interact across
+datasets.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+Generate your own mRIDs using <em>UUID4</em>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All JSON-LD examples below are just that; do <strong>not</strong> reuse mRIDs unless
+retrieved from the
+<a href="https://modellen.netbeheernederland.nl/object-register">NBNL Object Register</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each <em>System Operator</em> provides a dataset containing the connectivity for a
+specific part of the electrical grid (HV, MV and LV). The High Voltage (HV)
+dataset defines exchange points between TSO and DSOs. This dataset is also
+referred to as the <em>boundary dataset</em>.</p>
+</div>
+<div class="paragraph">
+<p>A singular dataset (with the exception of the boundary dataset) does not
+validate against the provided SHACL on its own; both boundary dataset and
+system operator specific dataset must be validated together.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_metadata"><a class="anchor" href="#_metadata"></a>Metadata</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each dataset requires metadata to keep track of issuer, issuance date, schema
+and dependencies.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example metadata in JSON-LD</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">"@id": "urn:uuid:2d3088c1-2b9a-4cbc-84fa-c0670e0e8ecc", <i class="conum" data-value="1"></i><b>(1)</b>
+"dcterms:issued": {
+  "@value": "2025-12-05T12:34:567Z", <i class="conum" data-value="2"></i><b>(2)</b>
+  "@type": "xsd:date"
+},
+"dcterms:publisher": {
+  "@id": "urn:uuid:4f74c8e2-adb5-4815-9607-eb00fb6a0d55",
+  "dcterms:title": "Liander" <i class="conum" data-value="3"></i><b>(3)</b>
+},
+"dcterms:conformsTo": [
+  {
+    "@id": "https://modellen.netbeheernederland.nl/nbnl-equipment/1.0" <i class="conum" data-value="4"></i><b>(4)</b>
+  }
+],
+"dcterms:references": [
+  {
+    "@id": "urn:uuid:4562ba86-b5e0-470b-8e36-dae55428d77f" <i class="conum" data-value="5"></i><b>(5)</b>
+  }
+]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following information is required:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>unique identifier for this dataset. Use a generated UUID;</p>
+</li>
+<li>
+<p>issuance data, start of the validity period for this dataset;</p>
+</li>
+<li>
+<p>publisher of the dataset. Use the mRID/name from the <em>NBNL Object Register</em>;</p>
+</li>
+<li>
+<p>schema to validate the dataset against. Verify usage of the correct version;</p>
+</li>
+<li>
+<p>any datasets this dataset is dependant on. For any non-boundary datasets,
+this is the <em>@id</em> of the boundary dataset referred to.</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_automatic_validation"><a class="anchor" href="#_automatic_validation"></a>Automatic validation</h3>
+<div class="paragraph">
+<p>Dataset metadata can be validated automatically using the
+<a href="_attachments/dataset.metadata.shacl.jsonld" class="xref attachment">Dataset Metadata SHACL</a>.</p>
+</div>
+<div class="paragraph">
+<p>Make sure you target the default graph of the JSON-LD dataset which is where
+the metadata lives or you will get false positive results.</p>
+</div>
+<details>
+<summary class="title">Example: Validating dataset metadata using PySHACL</summary>
+<div class="content">
+<div class="paragraph">
+<p>Let&#8217;s use the <a href="_attachments/dataset.metadata.shacl.jsonld" class="xref attachment">Dataset Metadata SHACL</a> to validate the [<a href="https://modellen.netbeheernederland.nl/nbnl-equipment/3.0/schema/_attachments/examples/jsonld/mv.example.jsonld">NBNL Equipment Profile 3.0 MV Example Dataset</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">from rdflib import Dataset, Graph
+from pyshacl import validate
+
+dataset = Dataset()
+dataset.parse("https://modellen.netbeheernederland.nl/nbnl-equipment/3.0/schema/_attachments/examples/jsonld/mv.example.jsonld", format="json-ld")
+
+shapes_graph = Graph()
+shapes_graph.parse("https://modellen.netbeheernederland.nl/modelling-guidelines/_attachments/dataset.metadata.shacl.jsonld", format="json-ld")
+
+conforms, results_graph, results_text = validate(dataset.default_graph,
+                                                 shacl_graph=shapes_graph)</code></pre>
+</div>
+</div>
+</div>
+</details>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+<div class="title">For modellers</div>
+Modellers might be tempted to import the <em>Dataset Metadata SHACL</em> in the SHACL
+data model their building. This will not work though, because data and its
+metadata live in different graphs.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tso_high_voltage_boundary_dataset"><a class="anchor" href="#_tso_high_voltage_boundary_dataset"></a>TSO High Voltage (Boundary) Dataset</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each dataset is dependant on the <em>Object Register</em> for the top level instances,
+such as cim:GeographicalRegion and cim:SubGeographicalRegion (<em>License Area</em>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">"dcterms:references": [
+  {
+    "@id": "urn:uuid:5bdf9a6d-ef38-4c4d-a6ee-42a9accdec64" <i class="conum" data-value="1"></i><b>(1)</b>
+  }
+]</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Include a refence to the JSON-LD provided by the Object Register</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Consumers of the dataset need to include the Object Register JSON-LD
+in orden for the dataset to validate
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The License Area is a container for all cim:Substation-s in the dataset. Use
+the mRID for the License Area from the Object Register, do not add the
+cim:SubGeographicalRegion itself to the dataset:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "@id": "urn:uuid:755de658-5567-4b65-85bd-f6d3cf41d992",
+  "@type": "cim:Substation",
+  "cim:Substation.Region": {
+    "@id": "urn:uuid:2128cb2f-9425-4cf7-9462-9fd59e06542d"
+  },
+  "cim:IdentifiedObject.mRID": "755de658-5567-4b65-85bd-f6d3cf41d992",
+  "cim:IdentifiedObject.name": "Station Arnhem 150"
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Refer to other instances through their @id
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A cim:Substation is a <em>HS/MS-onderstation</em>, which acts as a container
+for cim:VoltageLevel-s and the eu:BoundaryPoint-s.</p>
+</div>
+<div class="sect2">
+<h3 id="_voltage_level"><a class="anchor" href="#_voltage_level"></a>Voltage Level</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "@id": "urn:uuid:69e74dbd-b68a-4e2b-8cf7-da98891de6a1",
+  "@type": "cim:VoltageLevel",
+  "cim:VoltageLevel.BaseVoltage": {
+    "@id": "urn:uuid:a22b6bf3-33ab-4f82-89c5-0d427625f2da" <i class="conum" data-value="1"></i><b>(1)</b>
+  },
+  "cim:VoltageLevel.Substation": {
+    "@id": "urn:uuid:755de658-5567-4b65-85bd-f6d3cf41d992"
+  },
+  "cim:IdentifiedObject.mRID": "69e74dbd-b68a-4e2b-8cf7-da98891de6a1"
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+At the time of writing, transformers, busbars, switches and bays are
+<strong>not</strong> part of the HV dataset
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A cim:VoltageLevel has a cim:BaseVoltage (1), specifying the high voltage
+transmission level. cim:BaseVoltage is managed by the <em>NBNL Object Register</em>,
+so there is no need to seperately add the cim:BaseVoltage and cim:Voltage
+instance. The cim:VoltageLevel is associated with a cim:Substation. It&#8217;s
+common practice to add a cim:VoltageLevel for each transformer on the
+transmission side of the cim:Substation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_boundary_point"><a class="anchor" href="#_boundary_point"></a>Boundary Point</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "@id": "urn:uuid:d39090b1-58aa-446b-9551-4c6188aa7d0f",
+  "@type": "eu:BoundaryPoint",
+  "nl:IdentifiedObject.europeanArticleNumberEAN": "8000123456789012",
+  "eu:BoundaryPoint.fromEndIsoCode": "NL",
+  "eu:BoundaryPoint.fromEndNameTso": "TenneT",
+  "eu:BoundaryPoint.toEndIsoCode": "NL",
+  "eu:BoundaryPoint.toEndNameTso": "Liander",
+  "cim:IdentifiedObject.mRID": "d39090b1-58aa-446b-9551-4c6188aa7d0f"
+},
+{
+  "@id": "urn:uuid:f0c14f64-3aa3-44ae-b858-18d6a75dc72a",
+  "@type": "cim:ConnectivityNode", <i class="conum" data-value="1"></i><b>(1)</b>
+  "cim:ConnectivityNode.ConnectivityNodeContainer": {
+    "@id": "urn:uuid:69e74dbd-b68a-4e2b-8cf7-da98891de6a1" <i class="conum" data-value="2"></i><b>(2)</b>
+  },
+  "eu:ConnectivityNode.BoundaryPoint": {
+    "@id": "urn:uuid:d39090b1-58aa-446b-9551-4c6188aa7d0f" <i class="conum" data-value="3"></i><b>(3)</b>
+  },
+  "cim:IdentifiedObject.mRID": "f0c14f64-3aa3-44ae-b858-18d6a75dc72a"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Defining a <em>Boundary Point</em> between TSO/DSO is achieved by adding one or more
+cim:ConnectivityNode-s (1) to a specific cim:VoltageLevel (2) and associating
+the cim:ConnectivityNode to a cim:BoundaryPoint (3).</p>
+</div>
+<div class="paragraph">
+<p>Repeat all steps above to create instances for all functions in the grid and
+associated where required. For a full example, see
+<a href="#schema:attachment$examples/jsonld/hv-boundary.example.jsonld" class="xref unresolved">Example
+High Voltage (HV) JSON-LD instance data</a>. Note that the MV example data
+includes a copy of the boundary dataset for validation purposes. Do <strong>not</strong>
+include the boundary dataset for datasets created by a System Operator.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_dso_medium_voltage_mv_dataset"><a class="anchor" href="#_dso_medium_voltage_mv_dataset"></a>DSO Medium Voltage (MV) Dataset</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The DSO MV dataset builds on the boundary dataset by adding
+cim:PowerTransformer-s and cim:VoltageLevel-s for each distribution
+transformer. Each <em>Distribution System Operator</em> provides a dataset for its own
+License Area, associated to the boundary dataset.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+a DSO dataset does not validate stand-alone against the SHACL, the
+boundary dataset is also required!
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_substation"><a class="anchor" href="#_substation"></a>Substation</h3>
+<div class="paragraph">
+<p>Each DSO creates a separate Substation as a container for <code>Equipment</code>-s, which
+is contained in the License Area (<code>SubGeographicalRegion</code>) for that DSO. The
+relationship between <code>Substation</code>-s from both TSO &amp; DSO is established through
+the use of <code>BoundaryPoint</code>-s.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "@id": "urn:uuid:d256319c-f2d8-4bee-a586-37167d841a78",
+  "@type": "cim:Substation",
+  "cim:Substation.Region": {
+    "@id": "urn:uuid:4f74c8e2-adb5-4815-9607-eb00fb6a0d55"
+  },
+  "cim:IdentifiedObject.mRID": "d256319c-f2d8-4bee-a586-37167d841a78",
+  "cim:IdentifiedObject.name": "Liander MS-ruimte 10"
+},</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_power_transformer"><a class="anchor" href="#_power_transformer"></a>Power Transformer</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "@id": "urn:uuid:efeba515-547b-4c1a-8cd0-4cbc5f714283",
+  "@type": "cim:PowerTransformer", <i class="conum" data-value="1"></i><b>(1)</b>
+  "cim:Equipment.EquipmentContainer": {
+    "@id": "urn:uuid:d256319c-f2d8-4bee-a586-37167d841a78" <i class="conum" data-value="2"></i><b>(2)</b>
+  },
+  "cim:IdentifiedObject.mRID": "efeba515-547b-4c1a-8cd0-4cbc5f714283"
+},</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add all cim:PowerTransformer-s (1) to the cim:Substation (2) created in the
+previous step.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "@id": "urn:uuid:9cc70c8a-f352-4ad5-8743-6295e2800c63",
+  "@type": "cim:Terminal", <i class="conum" data-value="2"></i><b>(2)</b>
+  "cim:Terminal.ConnectivityNode": {
+    "@id": "urn:uuid:f0c14f64-3aa3-44ae-b858-18d6a75dc72a" <i class="conum" data-value="3"></i><b>(3)</b>
+  },
+  "cim:IdentifiedObject.mRID": "9cc70c8a-f352-4ad5-8743-6295e2800c63"
+},
+{
+  "@id": "urn:uuid:3c052f67-8180-44a9-8bb6-f13b75e94f02",
+  "@type": "cim:PowerTransformerEnd", <i class="conum" data-value="1"></i><b>(1)</b>
+  "cim:PowerTransformerEnd.PowerTransformer": {
+    "@id": "urn:uuid:efeba515-547b-4c1a-8cd0-4cbc5f714283"
+  },
+  "cim:TransformerEnd.endNumber": 1,
+  "cim:TransformerEnd.Terminal": {
+    "@id": "urn:uuid:9cc70c8a-f352-4ad5-8743-6295e2800c63"
+  },
+  "cim:IdentifiedObject.mRID": "3c052f67-8180-44a9-8bb6-f13b75e94f02"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the primary transformer winding, add a cim:PowerTransformerEnd (1) and
+cim:Terminal (2). The cim:PowerTransformerEnd is associated with both a
+cim:Terminal and cim:PowerTransformer. Associate the cim:Terminal from the
+primary cim:PowerTransformerEnd with the cim:ConnectivityNode defining a
+cim:BoundaryPoint (3) from the boundary dataset.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "@id": "urn:uuid:4d4b29be-1386-45e1-acc3-b86cfab83c94",
+  "@type": "cim:Terminal",
+  "cim:Terminal.ConnectivityNode": {
+    "@id": "urn:uuid:13232d25-3dd8-46f1-ad21-a77b0458648e"
+  },
+  "cim:IdentifiedObject.mRID": "4d4b29be-1386-45e1-acc3-b86cfab83c94"
+},
+{
+  "@id": "urn:uuid:3a926964-8420-4c57-8a1d-8ac87193b0c6",
+  "@type": "cim:PowerTransformerEnd",
+  "cim:PowerTransformerEnd.PowerTransformer": {
+    "@id": "urn:uuid:efeba515-547b-4c1a-8cd0-4cbc5f714283"
+  },
+  "cim:TransformerEnd.endNumber": 2,
+  "cim:TransformerEnd.Terminal": {
+    "@id": "urn:uuid:4d4b29be-1386-45e1-acc3-b86cfab83c94"
+  },
+  "cim:IdentifiedObject.mRID": "3a926964-8420-4c57-8a1d-8ac87193b0c6"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create an cim:VoltageLevel instance for each cim:PowerTransformer, following
+the instructions from <a href="#_voltage_level">Voltage Level</a>. Associate the cim:Terminal for the
+secondary (and up) winding(s) for the cim:PowerTransformerEnd with the
+cim:ConnectivityNode in the create cim:VoltageLevel. This explicitly associates
+a cim:PowerTransformerEnd with a specific cim:VoltageLevel and cim:BaseVoltage.</p>
+</div>
+<div class="paragraph">
+<p>For a full example, see
+<a href="#schema:attachment$examples/jsonld/mv.example.jsonld" class="xref unresolved">Example
+Medium Voltage (MV) JSON-LD instance data</a>. Note that the MV example data
+includes a copy of the boundary dataset for validation purposes. Do <strong>not</strong>
+include the boundary dataset for datasets created by a System Operator.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Netbeheer Nederland. Licensed under <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache 2.0</a></p>
+</footer>
+<script id="site-script" src="../_/js/site.js" data-ui-root-path="../_"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script src="../_/js/vendor/lunr.js"></script>
+<script src="../_/js/search-ui.js" id="search-ui-script" data-site-root-path=".." data-snippet-length="100" data-stylesheet="../_/css/search.css"></script>
+<script async src="../search-index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+=  Datasets
+
+// Each *dataset* MUST be encoded as an _RDF dataset_ which contains exactly two graphs:
+//
+// * a _named graph_ containing the data, which will be referred to as the *data graph*
+// * the _default graph_ containing (meta)data about the data graph
+
+Every **dataset** MUST be encoded as an RDF graph which is contained as a named graph in an RDF dataset alongside the default graph in which metadata of the dataset is stored.
+
+RDF datasets SHOULD be serialized as a _JSON-LD document_.
+
+.Anatomy of JSON-LD document representing the dataset
+[source,json]
+....
+{
+    "@id": <1>
+    <2>,
+    "@graph": [
+        <3>
+    ]
+}
+....
+
+<1> The IRI of the dataset.footnote:[One might have expected this value to identify the RDF dataset, but those do not have identifiers. This IRI identifies the associated graph object under `@graph` which in our case is what we consider the dataset.]
+<2> Metadata about the dataset (default graph).
+<3> The dataset graph object.
+
+[TIP]
+--
+If you find this confusing, perhaps it helps to look at it as follows.
+
+The object of the `@graph` key is a graph object, and by providing a namefootnote:[The term "name" has been chosen somewhat unfortunately. It is an IRI.] through `@id` it therefore becomes a named graph. This named graph we have called the data graph because our JSON-LD document represents a dataset.
+
+All the other statements at the top-level are about the subject `@id`, i.e. about the data graph, and are therefore metadata.
+--
+
+== Metadata
+
+The IRI of the data graph -- i.e. the value of the top-level `@id` -- is RECOMMENDED to be a UUIDv4 encoded as URN using the `uuid` namespace.
+
+Furthermore, the following metadata properties SHOULD be provided by each dataset:
+
+|===
+| Label | IRI | Type | Multivalued | Description
+
+| Issued
+| `dcterms:issued`
+| `xsd:date`
+| no
+| Date the dataset was issued, i.e. start of the period of its validity.
+
+| Publisher
+| `dcterms:publisher`
+| IRI from https://modellen.netbeheernederland.nl/begrippenlijsten/netbeheerder[Marktpartij]
+| no
+| The publisher of the dataset.
+
+| Conforms to
+| `dcterms:conformsTo`
+| IRI or `xsd:anyURI`
+| yes
+| Standards the dataset conforms. This SHOULD at least include the (version of the) profile or data model this data complies with.
+
+| References
+| `dcterms:references`
+| IRI
+| yes
+| Other datasets or data products this dataset references (depends on). For any non-boundary datasets this is the `@id` of the boundary dataset being referred to.
+|===
+
+=== Validating metadata
+
+The metadata requirements have been encoded as constraints in the https://modellen.netbeheernederland.nl/dataset-metadata.shacl.ttl[NBNL Dataset Metadata SHACL shapes graph] which can be used to automatically validate whether datasets satisfy the metadata requirements.
+
+WARNING: SHACL validators expect graphs, not RDF datasets. When an RDF dataset is passed as data graph to validate, many validators will use its default graph.
+
+[appendix]
+== Examples
+
+=== Metadata without data
+
+[source,json]
+----
+"@id": "urn:uuid:2d3088c1-2b9a-4cbc-84fa-c0670e0e8ecc",
+"dcterms:issued": {
+  "@value": "2025-12-05T12:34:567Z",
+  "@type": "xsd:date"
+},
+"dcterms:publisher": {
+  "@id": "urn:uuid:4f74c8e2-adb5-4815-9607-eb00fb6a0d55",
+  "dcterms:title": "Liander"
+},
+"dcterms:conformsTo": [
+  {
+    "@id": "https://modellen.netbeheernederland.nl/nbnl-equipment/1.0"
+  }
+],
+"dcterms:references": [
+  {
+    "@id": "urn:uuid:4562ba86-b5e0-470b-8e36-dae55428d77f"
+  }
+]
+----
