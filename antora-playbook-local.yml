@@ -11,7 +11,7 @@ ui:
   default_layout: single-page  # TODO: `standard`
 antora:
   extensions:
-    - require: 'scripts/configure-collector'
+    - require: 'scripts/configure-collector.js'
     - require: '@antora/collector-extension'
-    - require: 'scripts/post-process-versions'
+    - require: 'scripts/post-process-versions.js'
     - require: '@antora/lunr-extension'
