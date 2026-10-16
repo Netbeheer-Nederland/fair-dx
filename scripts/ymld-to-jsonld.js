@@ -6,7 +6,7 @@ const yaml = require('js-yaml');
         const yamlContent = fs.readFileSync('src/modules/ROOT/attachments/dataset.metadata.shacl.ymld', 'utf8');
         const data = yaml.load(yamlContent);
         const jsonString = JSON.stringify(data, null, 2); // 2-space indentation
-        fs.mkdir("built", (error) => {
+        fs.mkdir('built', (error) => {
             if (error) {
                 console.log(error);
             }
