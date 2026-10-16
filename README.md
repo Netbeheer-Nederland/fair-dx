@@ -1,5 +1,7 @@
 # NBNL Dataset
 
+Specification of what is expected of a dataset.
+
 ## For developers
 
 Locally build the current version:
