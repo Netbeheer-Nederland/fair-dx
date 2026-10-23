@@ -92,7 +92,7 @@ shapes_graph.parse("{site-url}/{page-component-version}/_attachments/dataset-met
 
 conforms, results_graph, results_text = validate(dataset.default_graph,
                                                  shacl_graph=shapes_graph,
-						 do_owl_imports=True)
+                                                 do_owl_imports=True)
 ....
 ====
 
