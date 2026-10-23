@@ -1,0 +1,199 @@
+= NBNL Message Exchange Standard
+
+////
+[.big]
+This standard describes how to represent messages for exchanging datasets when working with the NBNL Profile Group.
+////
+
+:metadata-shacl-yml: attachment$artifacts/dataset.metadata.shacl.yml
+:metadata-shacl-jsonld: attachment$artifacts/dataset.metadata.shacl.jsonld
+:dfn-message: A dataset^DCAT^ which has been -- or is intended to be -- exchanged.
+//{%- from "modules/ROOT/partials/_helpers.adoc" import renderSchemaTable %}
+
+////
+Convert the SHACL/YAML-LD to SHACL/JSON-LD and write file:
+
+{{ readFile('modules/ROOT/attachments/artifacts/dataset.metadata.shacl.yml')
+     | parseYaml
+     | toJson
+     | writeFile('modules/ROOT/attachments/artifacts/dataset.metadata.shacl.jsonld')
+-}}
+////
+
+// [.small#metadata]
+[#metadata]
+Author:: Bart Kleijngeld
+Version:: {page-component-display-version}
+Artifacts::
+[no-bullet]
+* Schema: xref:{metadata-shacl-jsonld}[SHACL (JSON-LD),window=read-later] | xref:{metadata-shacl-yml}[YAML-LD,window=read-later]
+* Examples: xref::attachment$examples/diagram_layout_ap.yml[Empty message] | xref::attachment$examples/diagram_layout_ap.jsonld[Full message]
+
+== Introduction
+
+This specification lays out how to represent messages for exchanging datasets between energy market parties, most notably system operators.
+
+== Conformance
+The key words "MUST", MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be interpreted as described in <<RFC2119>>.
+
+For recommendations -- i.e. "SHOULD (NOT)" and "(NOT) RECOMMENDED" -- the principle of "comply or explain" applies: not complying is allowed but requires explaining why.
+
+== Representation
+
+[.rationale.small%collapsible]
+.Rationale
+====
+****
+* One might object to making the type `dcat:Dataset` by pointing out that since this JSON-LD document is a physical serialization, it is more appropriate to make it of type `dcat:Distribution`. Note however that the metadata in the default graph is not about this specific distribution, but about the _logical_ dataset. For that reason, `dcat:Dataset` is the appropriate type to use.
+* We limit ourselves in not being able to distinguish between metadata about the dataset and metadata about the message. For example, I cannot assert that the data was created at 11:00, and the message at 11:02. There are ways around this be rephrasing all message metadata as metadata about the message, e.g. `:myDataset :messageCreatedAt "11:00"`. This is very ugly, however. What seems much more reasonable and pragmatic is to accept the limitation and allow a level of ambiguity. Conflating the message and the dataset that is coupled to it 1-1 seems very fair. In fact, once we rename `:messageCreatedAt` to `sentAt` all of sudden this seems much more reasonable.
+****
+====
+
+A **message** consists of:
+
+* the *dataset* to be exchanged
+* message and dataset *metadata*
+
+NOTE: Technically, the metadata is about the dataset, not the message, but in the context of the message these can be conflated without issue. For example, there is no meaningful distinction between the creation date of the message, and the creation date of the dataset, since the dataset exists only in the conte
+
+
+Each message MUST be encoded as an RDF dataset, in which a single named graph is contained which represents the dataset, whereas the default graph contains the dataset metadata.footnote:[Each statement in the default graph is one about the named graph, i.e. about the dataset.].
+
+.Messages as RDF datasets
+image::rdf-dataset.svg[]
+
+=== Serialization
+
+The RDF dataset which encodes the message SHOULD be serialized as a _JSON-LD document_.footnote:[One possible reason for not complying is performance. JSON-LD is not a streamable format, so processing large files may take a heavy toll on working memory usage.]
+
+.RDF datasets serialized as JSON-LD documents
+image::jsonld-document.svg[]
+
+NOTE: It may be tempting to think the top-level `@id` identifies the RDF dataset (message), but it in fact identifies the associated graph object under `@graph` (dataset).
+
+== Identification
+
+A dataset MUST be uniquely identifiable by an IRI, i.e. the _dataset IRI_. This IRI SHOULD be stablefootnote:[If no IRI is explicitly assigned, parsers may generate IRIs (oftentimes URNs) to name the graph object. Although this may be sufficient in certain cases, it does not constitute a stable IRI.] and MUST be declared explicitly in the containing message. The message does not have its own identifier, but can be uniquely identified by the dataset IRI.
+
+== Metadata
+
+Dataset metadata MUST be exclusively contained in the default graph of the RDF dataset of which the dataset is part. Furthermore, it MUST be asserted that the dataset is of type `dcat:Dataset`.footnote:[In JSON-LD, this means there must be an entry at the top level with key `"@type"` and some IRI as value.]
+
+What follows is a description of the expected shape of the dataset metadata. These are also encoded in <<_validation,SHACL>>.
+
+=== Class: `dcat:Dataset`
+
+[cols="2,3,1,3"]
+|===
+| Property | Constraint | Allowed cardinality | Description
+
+| `dcterms:issued`
+| `xsd:string`
+| 1
+| Date the dataset was issued.
+
+| `dcterms:publisher`
+| IRI from https://modellen.netbeheernederland.nl/waardelijsten/marktpartijen/0.2[Marktpartijen 0.2]
+| 1
+| Publisher of the dataset.
+
+| `dcterms:references`
+| IRI or `xsd:anyURI`
+| 0..*
+| Other datasets this dataset depends on.
+
+| `dcterms:title`
+| `xsd:string` or `xsd:langString`
+| 0..1
+| Title of the dataset.
+
+|===
+
+== Validation
+
+An exchanged dataset 
+
+NOTE: This standard merely concerns itself with the validity of the RDF dataset
+What may be regarded a valid dataset is contextual. Some data needs only to have the expected shape as specified in its data model, others may need to satisfy additional standards, reference models and regulatory requirements.
+
+A dataset is *valid* if and only if it 
+. its data model
+. agreed upon standards
+
+Validation can be semi-automated by using the xref:{metadata-shacl-jsonld}[NBNL Dataset Metadata SHACL,window=read-later]:
+
+
+
+
+
+conforms to all the agreed upon standards that apply to it -- which may include compliance with regulatory requirements and the use of reference vocabularies -- and 
+
+
+* _valid RDF dataset_ when exchanging datasets
+* _valid dataset_
+
+
+Datasets are _valid_ if and only if they conform to the standards and models that apply to them. 
+
+Colloquially when we say we want to validate the dataset, more precisely we often mean we wish to ca
+
+Validating whether a dataset satisfies the expected metadata requirements can be largely automated using the xref:{metadata-shacl-jsonld}[Dataset Metadata SHACL,window=read-later]:
+
+[%collapsible]
+.Dataset Metadata SHACL (JSON-LD)
+====
+[source,yaml]
+....
+include::{metadata-shacl-jsonld}[]
+....
+====
+
+.Why can't SHACL enforce specifying the dataset type?
+****
+#TODO#: Write!
+It may surprise developers that this cannot be expressed in SHACL. This is because of a combination of the design goals of RDF (encoding partial information in an open world) and the design philosophy of SHACL (separation of semantics and constraint and the target mechanism) in RDF one can make statements about things without specifying their type. 
+****
+
+// == Data
+
+// All data MUST be contained in the <<_representation,dataset>>. Concerns such as how the graph object should be constructed and how the data should be modelled is outside of the scope of this document.
+
+[appendix]
+== Examples
+
+.Empty dataset with metadata
+====
+[source,json]
+----
+"@id": "urn:uuid:2d3088c1-2b9a-4cbc-84fa-c0670e0e8ecc", <1>
+"dcterms:issued": {
+  "@value": "2025-12-05T12:34:567Z",
+  "@type": "xsd:date"
+},
+"dcterms:publisher": {
+  "@id": "urn:uuid:4f74c8e2-adb5-4815-9607-eb00fb6a0d55", <2>
+  "dcterms:title": "Liander"
+},
+"dcterms:conformsTo": [ <3>
+  {
+    "@id": "https://modellen.netbeheernederland.nl/nbnl-equipment/1.0"
+  }
+],
+"dcterms:references": [
+  {
+    "@id": "urn:uuid:4562ba86-b5e0-470b-8e36-dae55428d77f"
+  }
+],
+"@graph": [] <4>
+----
+
+<1> The specified dataset IRI is a URN as has been advised.
+<2> The publisher is referenced by a permitted IRI from the controlled vocabulary https://modellen.netbeheernederland.nl/waardelijsten/marktpartijen/0.2[Marktpartijen (0.2),window=read-later].
+<3> For multivalued properties it is good practice to encode them in arrays even if it's just a single value.
+<4> The graph object contains nothing, i.e. the represented dataset is empty.
+====
+
+[bibliography]
+== References
+
+* [[[RFC2119]]] S. Bradner. 1997. https://www.rfc-editor.org/rfc/rfc2119[Key words for use in RFCs to Indicate Requirement Levels].

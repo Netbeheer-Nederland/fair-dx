@@ -1,3 +1,6 @@
+site:
+  url: https://modellen.netbeheernederland.nl/fair-dx
+  start_page: ROOT::index.adoc
 content:
   sources:
     - url: ''
@@ -6,6 +9,13 @@ content:
         - main
         - draft*
       start_path: src
+asciidoc:
+  attributes:
+    kroki-fetch-diagram: true
+    kroki-default-format: svg@
+    kroki-server-url: http://fruit.ritger.nl:9000
+  extensions:
+    - asciidoctor-kroki
 output:
   clean: true
   dir: docs

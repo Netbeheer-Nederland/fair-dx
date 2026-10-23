@@ -1,4 +1,4 @@
-= NBNL Message Exchange Standard
+= NBNL FAIR Data Exchange Standard
 :dfn-message: A dataset^DCAT^ that an agent^FOAF^ has the intention of transferring to another agent^FOAF^.
 
 == Introduction
