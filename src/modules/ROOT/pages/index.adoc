@@ -77,18 +77,18 @@ the metadata lives, or you risk getting false positive results.
 .Example: Validating dataset metadata using PySHACL
 ====
 
-Let's use the xref::attachment$dataset-metadata.shacl.jsonld[Dataset Metadata SHACL] to validate the [https://modellen.netbeheernederland.nl/nbnl-equipment/3.0/schema/_attachments/examples/jsonld/mv.example.jsonld[NBNL Equipment Profile 3.0 MV Example Dataset].
+Let's use the xref:attachment$dataset-metadata.shacl.jsonld[Dataset Metadata SHACL] to validate the xref:attachment$empty-dataset.example.jsonld[empty dataset example].
 
-[source,python]
+[source,python,subs=+attributes]
 ....
 from rdflib import Dataset, Graph
 from pyshacl import validate
 
 dataset = Dataset()
-dataset.parse("https://modellen.netbeheernederland.nl/nbnl-equipment/3.0/schema/_attachments/examples/jsonld/mv.example.jsonld", format="json-ld")
+dataset.parse("{site-url}/{page-component-version}/_attachments/empty-dataset.example.jsonld", format="json-ld")
 
 shapes_graph = Graph()
-shapes_graph.parse("https://modellen.netbeheernederland.nl/fair-dx/_attachments/dataset.metadata.shacl.jsonld", format="json-ld")
+shapes_graph.parse("{site-url}/{page-component-version}/_attachments/dataset-metadata.shacl.jsonld", format="json-ld")
 
 conforms, results_graph, results_text = validate(dataset.default_graph,
                                                  shacl_graph=shapes_graph)
