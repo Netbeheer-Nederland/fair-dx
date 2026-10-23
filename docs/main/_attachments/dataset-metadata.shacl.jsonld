@@ -1,0 +1,136 @@
+{
+  "@context": {
+    "@vocab": "http://www.w3.org/ns/shacl#",
+    "adms": "http://www.w3.org/ns/adms#",
+    "classes": {
+      "@container": "@id",
+      "@id": "dcterms:hasPart"
+    },
+    "closed": {
+      "@type": "xsd:boolean"
+    },
+    "datatype": {
+      "@type": "@id"
+    },
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "description": {
+      "@container": "@language",
+      "@id": "dcterms:description"
+    },
+    "enums": {
+      "@container": "@id",
+      "@id": "dcterms:hasPart"
+    },
+    "imports": {
+      "@id": "owl:imports",
+      "@type": "@id"
+    },
+    "in": {
+      "@container": "@list",
+      "@type": "@id"
+    },
+    "node": {
+      "@type": "@id"
+    },
+    "nodeKind": {
+      "@type": "@id"
+    },
+    "or": {
+      "@container": "@list",
+      "@type": "@id"
+    },
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "path": {
+      "@type": "@id"
+    },
+    "property": {
+      "@container": "@index",
+      "@context": {
+        "description": {
+          "@id": "sh:description",
+          "@type": "xsd:string"
+        },
+        "name": {
+          "@id": "sh:name",
+          "@type": "xsd:string"
+        }
+      },
+      "@index": "path"
+    },
+    "publisher": {
+      "@id": "dcterms:publisher"
+    },
+    "label": {
+      "@id": "rdfs:label"
+    },
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "sh": "http://www.w3.org/ns/shacl#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "title": {
+      "@container": "@language",
+      "@id": "dcterms:title"
+    }
+  },
+  "@id": "https://modellen.netbeheernederland.nl/fair-dx/0.1/message-metadata.shacl.jsonld",
+  "@type": [
+    "dcat:Dataset",
+    "adms:Asset",
+    "sh:ShapesGraph",
+    "owl:Ontology"
+  ],
+  "classes": {
+    "dcat:Dataset": {
+      "@type": [
+        "rdfs:Class",
+        "sh:NodeShape"
+      ],
+      "label": "Dataset",
+      "property": {
+        "dcterms:issued": {
+          "datatype": "xsd:dateTime",
+          "minCount": 1,
+          "maxCount": 1,
+          "name": "issued",
+          "description": "Date the dataset was issued."
+        },
+        "dcterms:publisher": {
+          "minCount": 1,
+          "maxCount": 1,
+          "name": "publisher",
+          "description": "Publisher of the dataset.",
+          "node": "https://modellen.netbeheernederland.nl/controlled-vocabularies/market-parties#market-partiesShape"
+        },
+        "dcterms:references": {
+          "name": "references",
+          "description": "Other datasets this dataset depends on.",
+          "or": [
+            {
+              "datatype": "xsd:anyURI"
+            },
+            {
+              "nodeKind": "sh:BlankNodeOrIRI"
+            }
+          ]
+        },
+        "dcterms:title": {
+          "maxCount": 1,
+          "name": "title",
+          "description": "Title of the dataset.",
+          "or": [
+            {
+              "datatype": "rdf:langString"
+            },
+            {
+              "datatype": "xsd:string"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "imports": [
+    "https://modellen.netbeheernederland.nl/controlled-vocabularies/market-parties.shacl.jsonld"
+  ]
+}
