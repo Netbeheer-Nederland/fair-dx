@@ -190,7 +190,8 @@ shapes_graph = Graph()
 shapes_graph.parse("https://modellen.netbeheernederland.nl/fair-dx/main/_attachments/dataset-metadata.shacl.jsonld", format="json-ld")
 
 conforms, results_graph, results_text = validate(dataset.default_graph,
-                                                 shacl_graph=shapes_graph)</code></pre>
+                                                 shacl_graph=shapes_graph,
+						 do_owl_imports=True)</code></pre>
 </div>
 </div>
 </div>

@@ -91,7 +91,8 @@ shapes_graph = Graph()
 shapes_graph.parse("{site-url}/{page-component-version}/_attachments/dataset-metadata.shacl.jsonld", format="json-ld")
 
 conforms, results_graph, results_text = validate(dataset.default_graph,
-                                                 shacl_graph=shapes_graph)
+                                                 shacl_graph=shapes_graph,
+						 do_owl_imports=True)
 ....
 ====
 
