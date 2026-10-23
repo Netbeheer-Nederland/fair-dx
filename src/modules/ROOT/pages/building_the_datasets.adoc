@@ -70,7 +70,7 @@ Furthermore, the following metadata properties SHOULD be provided by each datase
 
 The metadata requirements have been encoded as constraints in the https://modellen.netbeheernederland.nl/dataset-metadata.shacl.ttl[NBNL Dataset Metadata SHACL shapes graph] which can be used to automatically validate whether datasets satisfy the metadata requirements.
 
-WARNING: SHACL validators expect graphs, not RDF datasets. When an RDF dataset is passed as data graph to validate, many validators will use its default graph.
+CAUTION: SHACL validators expect graphs, not RDF datasets. When an RDF dataset is passed as data graph to validate, many validators will use its default graph.
 
 [appendix]
 == Examples

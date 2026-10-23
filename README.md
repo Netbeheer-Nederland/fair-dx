@@ -19,5 +19,5 @@ $ npx antora antora-playbook.yml
 Serve the built site:
 
 ```sh
-$ npx http-serve dist
+$ npx http-serve docs
 `````

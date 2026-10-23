@@ -2,6 +2,8 @@
   "dependencies": {
     "@antora/collector-extension": "^1.0.3",
     "@antora/lunr-extension": "^1.0.0-alpha.13",
-    "asciidoctor-kroki": "^1.0.1"
+    "antora": "^3.2.1",
+    "asciidoctor-kroki": "^0.18.1",
+    "nunjucks": "^3.2.4"
   }
 }

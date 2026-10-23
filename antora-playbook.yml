@@ -8,7 +8,7 @@ content:
       start_path: src
 output:
   clean: true
-  dir: dist
+  dir: docs
 ui:
   bundle:
     url: https://github.com/Netbeheer-Nederland/antora-ui-nbnl/releases/download/1.2/ui-bundle.zip

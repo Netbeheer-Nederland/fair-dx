@@ -1,0 +1,42 @@
+{% macro getIri(curie, schema) %}
+{% set curieParts = curie.split(':') %}
+{{ schema['@context'][curieParts[0]] ~ curieParts[1] -}}
+{% endmacro %}
+
+{% macro renderSchemaDiagram(schema) %}
+{% set dataset = schema.classes['dcat:Dataset'] -%}
+vars { d2-config.pad: 0 }
+direction: down
+{{ dataset.label }} {
+  shape: sql_table
+  {% for propertyName, property in dataset.property -%}
+  "{{ property.name }}"
+  {% endfor %}
+}
+{% endmacro %}
+
+{% macro renderSchemaTable(schema) %}
+{% for className, cls in schema.classes -%}
+{% set classIri = getIri(className, schema) %}
+=== Class: `{{ cls.label }}`
+[horizontal]
+IRI:: {{ classIri }}
+
+{% if cls.description -%}{{ cls.description }}{%- endif %}
+{% for propertyName, property in cls.property %}
+{% if loop.first %}
+.Properties
+[cols="1,3"]
+|===
+| Property | Description
+
+{% endif %}
+| {{ getIri(propertyName, schema) }}[`{{ propertyName }}`, title={{ propertyName }}]
+| {{ property.description }}
+
+{% endfor %}
+{% if loop.last %}
+|===
+{% endif %}
+{% endfor %}
+{% endmacro %}

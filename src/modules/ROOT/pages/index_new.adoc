@@ -1,0 +1,46 @@
+= NBNL Message Exchange Standard
+:dfn-message: A dataset^DCAT^ that an agent^FOAF^ has the intention of transferring to another agent^FOAF^.
+
+== Introduction
+
+Exchanging data across organisational boundaries is 
+
+== Conformance
+The key words "MUST", MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be interpreted as described in <<RFC2119>>.
+
+For recommendations -- i.e. "SHOULD (NOT)" and "(NOT) RECOMMENDED" -- the principle of "comply or explain" applies: not complying is allowed but requires explaining why.
+
+== Definition
+
+In this standard, the following definition of a message is used:
+
+[[dfn-message]]message:: {dfn-message}
+
+Messages also carry metadata to provide additional information to receivers, allow cataloging and make debugging easier.
+
+== Representation
+
+Each *<<dfn-message,message>>* MUST be encoded as an RDF dataset and MUST be identifiable by a *message IRI*. 
+
+* _metadata_ is contained in the default graph
+* _data_ is contained in the named graph associated with the message IRI
+
+Named graphs other than the one named with the nessage IRI SHOULD NOT exist in the RDF dataset.
+
+[NOTE]
+----
+Despite the use of the word “name” in “named graph”, the graph name is not required to denote the graph. It is merely syntactically paired with the graph. RDF does not place any formal restrictions on what resource the graph name may denote, nor on the relationship between that resource and the graph
+----
+
+
+[bibliography]
+== References
+
+* [[[RFC2119]]] S. Bradner. 1997. https://www.rfc-editor.org/rfc/rfc2119[Key words for use in RFCs to Indicate Requirement Levels].
+* [[[RDF11-CONCEPTS]]] W3C. 2014. https://www.w3.org/TR/rdf11-concepts[RDF 1.1 Concepts and Abstract Syntax]
+
+[glossary]
+== Glossary
+
+[glossary]
+

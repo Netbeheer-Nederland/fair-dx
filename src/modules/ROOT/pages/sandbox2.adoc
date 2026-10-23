@@ -1,0 +1,33 @@
+= NBNL Dataset
+//{%- from "modules/ROOT/partials/_helpers.adoc" import renderSchemaDiagram, renderSchemaTable %}
+//{% set shaclYamlPath = 'modules/ROOT/attachmnets/artifacts/dataset.metadata.shacl.yml' %}
+
+////
+Convert the SHACL/YAML-LD to SHACL/JSON-LD and write file:
+
+{{ readFile('modules/ROOT/attachments/artifacts/dataset.metadata.shacl.yml')
+     | parseYaml
+     | toJson
+     | writeFile('modules/ROOT/attachments/artifacts/dataset.metadata.shacl.jsonld')
+-}}
+////
+
+[#metadata]
+Author:: Bart Kleijngeld
+Version:: {page-component-display-version}
+Artifacts::
+[unstyled]
+* xref:attachment$artifacts/dataset.metadata.shacl.yml[SHACL (YAML-LD),window=read-later)]
+* xref:attachment$artifacts/dataset.metadata.shacl.jsonld[SHACL (JSON-LD),window=read-later)]
+
+== Metadata
+
+//{%- set schema = readFile('modules/ROOT/attachments/artifacts/dataset.metadata.shacl.yml') | parseYaml %}
+
+.Metadata schema diagram
+[d2,svg,width=20%]
+....
+{{ renderSchemaDiagram(schema) }}
+....
+
+{{ renderSchemaTable(schema) }}
